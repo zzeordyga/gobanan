@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">  
   <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+  <link rel="stylesheet" href=" {{mix ('css/style.css')}}">
   <title>@yield('title')</title>
 </head>
 <body>
@@ -16,7 +17,9 @@
             </li>
             <li class="container flex justify-end space-x-4">
                 <div>
-                    <a href="#">Dummy 1</a>
+                    <a href="#search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </a>
                 </div>
                 <div>
                     <a href="#">Dummy 1</a>
