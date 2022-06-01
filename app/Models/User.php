@@ -58,4 +58,10 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    protected $attributes = [
+        'gender' => '-',
+        'phone' => '-',
+        'picture' => 'profile.svg',
+    ];
 }

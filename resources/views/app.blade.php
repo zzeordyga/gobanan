@@ -2,10 +2,21 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  {{--  Icon  --}}
+  <link rel="icon" href="{{ url('image/logo/fi.png') }}">
+  
+  {{-- Tailwind CSS --}}
   <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+  
+  {{-- Font Awesome --}}
   <link rel="stylesheet" href=" {{mix ('css/style.css')}}">
-  <title>@yield('title')</title>
+  
+  {{-- Self-made Styling --}}
+  <link rel="stylesheet" href="{{ asset('css/index.css') }}">
+
+  <title>{{ config('app.name', 'Gobanan') }}</title>
 </head>
 <body>
     <nav>
@@ -15,20 +26,19 @@
                     <img src="{{asset('image/logo/fiverr.svg')}}" alt="">
                 </a>
             </li>
-            <li class="container flex justify-end space-x-4">
+            <li class="container flex justify-end space-x-4 items-center">
+                <form action="#" class="search-bar w-1/12 hover:w-1/4">
+                    <input type="search" placeholder="Search here...">
+                    <button type="submit" class="floating-icon float-right"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </form>
                 <div>
-                    <a href="#search">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </a>
+                    <a class="font-bold">Explore</a>
                 </div>
                 <div>
-                    <a href="#">Dummy 1</a>
+                    <a class="font-bold">Login</a>
                 </div>
                 <div>
-                    <a href="#">Dummy 1</a>
-                </div>
-                <div>
-                    <a href="#">Dummy 1</a>
+                    <a class="font-bold px-4 py-1 mx-2 border border-gray-800 rounded">Register</a>
                 </div>
             </li>
         </ul>

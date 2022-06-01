@@ -1,0 +1,48 @@
+.floating-icon {
+    box-sizing: border-box;
+    width: 42.5px;
+    height: 42.5px;
+    position: relative;
+    top: 0;
+    right: 0;
+    border-radius: 50%;
+    color: #07051a;
+    text-align: center;
+    font-size: 1.2em;
+    /* transition: all 0.5s ease-in; */
+}
+
+.search-bar {
+    position: relative;
+    transition: all 0.5s ease-in;
+}
+
+.search-bar:hover input{
+    display: block;
+}
+
+.search-bar:hover .fa{
+    background: #07051a;
+    color: white;
+}
+
+.search-bar:hover .floating-icon{
+    position: absolute;
+    background: #07051a;
+    color: white;
+}
+
+input[type=search]{
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;;
+    height: 42.5px;
+    line-height: 30px;
+    outline: 0;
+    border: 0;
+    display: none;
+    font-size: 1em;
+    border-radius: 20px;
+    padding: 0 20px;
+}

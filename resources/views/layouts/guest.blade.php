@@ -7,11 +7,13 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
-        <!-- Fonts -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
-
+        <!-- Icon -->
+        <link rel="icon" href="{{ url('image/logo/fi.png') }}"> 
+        
         <!-- Styles -->
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+        <link rel="stylesheet" href=" {{mix ('css/style.css')}}">
+  
 
         <!-- Scripts -->
         <script src="{{ mix('js/app.js') }}" defer></script>
