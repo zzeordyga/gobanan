@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\TransactionHeader;
 use Illuminate\Database\Seeder;
 
 class TransactionHeaderSeeder extends Seeder
@@ -13,6 +14,8 @@ class TransactionHeaderSeeder extends Seeder
      */
     public function run()
     {
-        //
+        TransactionHeader::factory()
+            ->count(15)
+            ->create();
     }
 }

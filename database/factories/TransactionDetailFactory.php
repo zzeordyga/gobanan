@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Service;
+use App\Models\TransactionHeader;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TransactionDetailFactory extends Factory
@@ -13,8 +15,13 @@ class TransactionDetailFactory extends Factory
      */
     public function definition()
     {
+        $statuses = ["Done", "Payment Pending", "Ongoing"];
+        array_rand($statuses);
+
         return [
-            //
+            "header_id" => TransactionHeader::inRandomOrder()->first()->id,
+            "service_id" => Service::inRandomOrder()->first()->id,
+            "status" => $statuses[0],
         ];
     }
 }

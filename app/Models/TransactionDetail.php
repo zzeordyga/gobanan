@@ -8,8 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class TransactionDetail extends Model
 {
     use HasFactory;
-
+    
     protected $attributes = [
-        'payment_type' => 'Payment Pending',
+        'status' => 'Ongoing',
     ];
+    
+    public function transactionHeader(){
+        return $this->belongsTo(TransactionHeader::class);
+    }
+    
+    public function service(){
+        return $this->belongsTo(Service::class);
+    }
 }

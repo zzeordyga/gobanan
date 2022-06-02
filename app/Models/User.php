@@ -24,9 +24,11 @@ class User extends Authenticatable
      * @var string[]
      */
     protected $fillable = [
+        'username',
         'name',
         'email',
         'password',
+        'dob',
     ];
 
     /**
@@ -63,5 +65,14 @@ class User extends Authenticatable
         'gender' => '-',
         'phone' => '-',
         'picture' => 'profile.svg',
+        'role' => 'member',
     ];
+
+    public function carts(){
+        return $this->hasMany(Cart::class);
+    }
+    
+    public function services(){
+        return $this->hasMany(Service::class);
+    }
 }

@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class CategorySeeder extends Seeder
 {
@@ -13,6 +14,31 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-        //
+        DB::table('categories')->insert([
+            [
+                'name' => "Graphics & Design",
+            ],
+            [
+                'name' => "Digital Marketing",
+            ],
+            [
+                'name' => "Writing & Translation",
+            ],
+            [
+                'name' => "Video & Animation",
+            ],
+            [
+                'name' => "Music & Audio",
+            ],
+            [
+                'name' => "Programming & Tech",
+            ],
+            [
+                'name' => "Business",
+            ],
+            [
+                'name' => "Lifestyle",
+            ],
+        ]);
     }
 }

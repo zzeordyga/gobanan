@@ -10,6 +10,14 @@ class TransactionHeader extends Model
     use HasFactory;
 
     protected $attributes = [
-        'status' => 'Ongoing',
+        'payment_type' => 'Payment Pending',
     ];
+
+    public function details(){
+        return $this->hasMany(TransactionDetail::class);
+    }
+    
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }

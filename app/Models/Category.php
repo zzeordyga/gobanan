@@ -12,4 +12,8 @@ class Category extends Model
     protected $attributes = [
         'times_visited' => 0,
     ];
+    
+    public function services(){
+        return $this->hasMany(Service::class);
+    }
 }

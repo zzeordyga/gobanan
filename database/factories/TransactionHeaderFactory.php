@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TransactionHeaderFactory extends Factory
@@ -13,8 +14,12 @@ class TransactionHeaderFactory extends Factory
      */
     public function definition()
     {
+        $payment_types = ["Credit", "Debit", "Ongoing"];
+        array_rand($payment_types);
+
         return [
-            //
+            "user_id" => User::inRandomOrder()->first()->id,
+            "payment_type" => $payment_types[0],
         ];
     }
 }
