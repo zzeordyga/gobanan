@@ -1,1 +1,1 @@
-<img src="{{asset('image/logo/fiverr.svg')}}" alt="" class="w-1/3">
+<img src="{{asset('image/logo/fiverr.svg')}}" alt="" class="w-1/12">

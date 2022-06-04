@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             ServiceSeeder::class,
             CartSeeder::class,
             TransactionHeaderSeeder::class,
+            TransactionDetailSeeder::class,
         ]);
     }
 }

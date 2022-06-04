@@ -15,11 +15,8 @@ class TransactionDetailSeeder extends Seeder
      */
     public function run()
     {
-        $transaction_header = TransactionHeader::factory()->create();
-
         TransactionDetail::factory()
-            ->count(3)
-            ->for($transaction_header)
+            ->count(30)
             ->create();
     }
 }

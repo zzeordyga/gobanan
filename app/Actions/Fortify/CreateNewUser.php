@@ -19,7 +19,7 @@ class CreateNewUser implements CreatesNewUsers
      * @return \App\Models\User
      */
     public function create(array $input)
-    {
+    {   
         Validator::make($input, [
             'username' => ['required', 'string', 'max:24', 'unique:users', 'alpha_dash'],
             'name' => ['required', 'string', 'max:255'],
@@ -27,7 +27,11 @@ class CreateNewUser implements CreatesNewUsers
             'password' => $this->passwordRules(),
             'dob' => ['required', 'date', 'before:-18 years'],
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
-        ])->validate();
+        ], 
+        [
+            'dob.before' => "You must at least be 18 years old."
+        ]
+        )->validate();
 
         return User::create([
             'username' => $input['username'],

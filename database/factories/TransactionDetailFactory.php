@@ -16,12 +16,11 @@ class TransactionDetailFactory extends Factory
     public function definition()
     {
         $statuses = ["Done", "Payment Pending", "Ongoing"];
-        array_rand($statuses);
 
         return [
             "header_id" => TransactionHeader::inRandomOrder()->first()->id,
             "service_id" => Service::inRandomOrder()->first()->id,
-            "status" => $statuses[0],
+            "status" => $statuses[array_rand($statuses)],
         ];
     }
 }
