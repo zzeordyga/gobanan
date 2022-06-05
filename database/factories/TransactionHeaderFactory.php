@@ -14,7 +14,7 @@ class TransactionHeaderFactory extends Factory
      */
     public function definition()
     {
-        $payment_types = ["Credit", "Debit", "Ongoing"];
+        $payment_types = ["Credit", "Debit"];
 
         return [
             "user_id" => User::inRandomOrder()->first()->id,

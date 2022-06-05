@@ -15,7 +15,7 @@ class TransactionDetailFactory extends Factory
      */
     public function definition()
     {
-        $statuses = ["Done", "Payment Pending", "Ongoing"];
+        $statuses = ["Done", "Ongoing"];
 
         return [
             "header_id" => TransactionHeader::inRandomOrder()->first()->id,

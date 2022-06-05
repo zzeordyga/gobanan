@@ -58,7 +58,7 @@
 
     <div>
         <h1 class="text-4xl p-6 font-bold">Discover new freelance service here!</h1>
-        <ul class="grid grid-cols-1 gap-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 my-6 px-16">
+        <ul class="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 my-6 px-16">
             @foreach ($services as $service)
                 <li class="col-span-1 flex flex-col bg-white rounded-lg shadow divide-y divide-gray-200">
                     <div>

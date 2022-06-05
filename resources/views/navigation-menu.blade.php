@@ -29,7 +29,7 @@
                             <a href="/login" class="font-bold">Login</a>
                         </div>
                         <div class="nav-item">
-                            <a href="/register" class="font-bold px-4 py-1 mx-2 border border-gray-800 hover:border-0 rounded button-nav-item">Register</a>
+                            <a href="/register" class="font-bold">Register</a>
                         </div>
                     @endguest
                     @auth
@@ -37,16 +37,16 @@
                             <a href="#" class="font-bold">Orders</a>
                         </div>
                         <div class="nav-item">
-                            <a href="#" class="font-bold">Cart</a>
+                            <a href="{{route('cart')}}" class="font-bold">Cart</a>
                         </div>
                         <div class="nav-item">
-                            <a href="#" class="font-bold px-4 py-1 mx-2 border border-gray-800 hover:border-0 rounded button-nav-item">Add Service</a>
+                            <a href="#" class="font-bold">Add Service</a>
                         </div>
                     @endauth
                 </div>
 
                 @auth
-                    <div class="flex sm:items-center sm:ml-6">
+                    <div class="flex sm:items-center">
                         <!-- Teams Dropdown -->
                         @if (Laravel\Jetstream\Jetstream::hasTeamFeatures())
                             <div class="ml-3 relative">
@@ -128,6 +128,12 @@
                                         {{ __('Profile') }}
                                     </x-jet-dropdown-link>
 
+                                    @if (Auth::user()->role == 'admin')
+                                        <x-jet-dropdown-link href="{{route('admin-dashboard')}}">
+                                            {{ __('Admin Page') }}
+                                        </x-jet-dropdown-link>
+                                    @endif
+
                                     @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
                                         <x-jet-dropdown-link href="{{ route('api-tokens.index') }}">
                                             {{ __('API Tokens') }}
@@ -179,7 +185,7 @@
                 <x-jet-responsive-nav-link href="#">
                     {{ __('Orders') }}
                 </x-jet-responsive-nav-link>
-                <x-jet-responsive-nav-link href="#">
+                <x-jet-responsive-nav-link href="{{route('cart')}}">
                     {{ __('Cart') }}
                 </x-jet-responsive-nav-link>
                 <x-jet-responsive-nav-link href="#">
@@ -221,6 +227,12 @@
                     @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
                         <x-jet-responsive-nav-link href="{{ route('api-tokens.index') }}" :active="request()->routeIs('api-tokens.index')">
                             {{ __('API Tokens') }}
+                        </x-jet-responsive-nav-link>
+                    @endif
+
+                    @if (Auth::user()->role == 'admin')
+                        <x-jet-responsive-nav-link href="{{route('admin-dashboard')}}" :active="request()->routeIs('admin-dashboard')">
+                            {{ __('Admin Page') }}
                         </x-jet-responsive-nav-link>
                     @endif
 

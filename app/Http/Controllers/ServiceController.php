@@ -68,6 +68,10 @@ class ServiceController extends Controller
     {
         $service = Service::find($id);
 
+        if($service == null){
+            return redirect('/error');
+        }
+
         return view('pages.service', [
             'service' => $service,
         ]);

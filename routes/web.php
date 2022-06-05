@@ -27,10 +27,18 @@ Route::get('/category/{id}', [ServiceController::class, 'category'])->name('cate
 
 Route::get('/search', [ServiceController::class, 'search'])->name('search');
 
+Route::get('/user', [UserController::class, 'show'])->name('user');
+
+Route::get('/error', function() {
+    return view('pages.error');
+})->name('error');
+
 // Member Middleware
 Route::middleware(['auth:sanctum'])->group(function() {
-    Route::post('/addToCart', [CartController::class, 'store'])
-    ->name('addToCart');
+    Route::get('/cart', [CartController::class, 'index'])->name('cart');
+    Route::post('/addToCart', [CartController::class, 'store'])->name('addToCart');
+    Route::post('/checkout', [CartController::class, 'create'])->name('checkout');
+    Route::delete('/deleteCart', [CartController::class, 'destroy'])->name('deleteCart');
 });
 
 // Admin Middleawre

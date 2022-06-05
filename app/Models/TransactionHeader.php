@@ -10,7 +10,7 @@ class TransactionHeader extends Model
     use HasFactory;
 
     protected $attributes = [
-        'payment_type' => 'Payment Pending',
+        'payment_type' => 'Debit',
     ];
 
     public function details(){
