@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TransactionDetail;
+use App\Models\Service;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class TransactionDetailController extends Controller
+class UserController extends Controller
 {
-        /**
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -46,7 +47,13 @@ class TransactionDetailController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = User::find($id);
+        $services = Service::inRandomOrder()->limit(6)->get();
+
+        return view('pages.user', [
+            'user' => $user,
+            'services' => $services,
+        ]);
     }
 
     /**
@@ -82,14 +89,4 @@ class TransactionDetailController extends Controller
     {
         //
     }
-
-    public function finishOrder(Request $req){
-        $td = TransactionDetail::find($req->id);
-
-        $td->status = 'Done';
-        $td->save();
-
-        return redirect()->back();
-    }
-
 }

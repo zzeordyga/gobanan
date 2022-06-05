@@ -32,6 +32,9 @@
                                                         <a class="font-bold text-keppel hover:text-metallic-blue" href="{{route('user', $cart->service()->user()->id)}}"> {{$cart->service()->user()->name}} </a>
                                                     </p>
                                                     <p class="mt-2 flex items-center text-sm text-gray-500">
+                                                        Contact Email : {{$purchase->user_email}}
+                                                    </p>
+                                                    <p class="mt-2 flex items-center text-sm text-gray-500">
                                                     <!-- Heroicon name: solid/check-circle -->
                                                         <i class="fa-solid fa-dollar-sign"></i>
                                                         <span class="ml-2">{{$cart->service()->price}}</span>

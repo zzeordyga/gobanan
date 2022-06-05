@@ -2,8 +2,9 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CartController;
-use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\TransactionDetailController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,7 +28,9 @@ Route::get('/category/{id}', [ServiceController::class, 'category'])->name('cate
 
 Route::get('/search', [ServiceController::class, 'search'])->name('search');
 
-Route::get('/user', [UserController::class, 'show'])->name('user');
+Route::get('/user/{id}', [UserController::class, 'show'])->name('user');
+
+Route::get('/user/{id}/services', [ServiceController::class, 'userServices'])->name('user-services');
 
 Route::get('/error', function() {
     return view('pages.error');
@@ -39,6 +42,9 @@ Route::middleware(['auth:sanctum'])->group(function() {
     Route::post('/addToCart', [CartController::class, 'store'])->name('addToCart');
     Route::post('/checkout', [CartController::class, 'create'])->name('checkout');
     Route::delete('/deleteCart', [CartController::class, 'destroy'])->name('deleteCart');
+
+    Route::get('/orders', [ServiceController::class, 'orders'])->name('orders');
+    Route::put('/finishOrder', [TransactionDetailController::class, 'finishOrder'])->name('finishOrder');
 });
 
 // Admin Middleawre

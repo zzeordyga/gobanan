@@ -6,7 +6,7 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center w-20">
                     <a href="{{ route('dashboard') }}">
-                        <img src="{{asset('image/logo/fiverr.svg')}}" alt="">
+                        <img src="{{asset('image/logo/gobanan.svg')}}" alt="">
                     </a>
                 </div>
             </div>
@@ -34,13 +34,13 @@
                     @endguest
                     @auth
                         <div class="nav-item">
-                            <a href="#" class="font-bold">Orders</a>
+                            <a href="{{route('orders')}}" class="font-bold">Orders</a>
                         </div>
                         <div class="nav-item">
                             <a href="{{route('cart')}}" class="font-bold">Cart</a>
                         </div>
                         <div class="nav-item">
-                            <a href="#" class="font-bold">Add Service</a>
+                            <a href="{{route('user-services', Auth::user()->id)}}" class="font-bold">Your Services</a>
                         </div>
                     @endauth
                 </div>
@@ -182,14 +182,14 @@
                 {{ __('Explore') }}
             </x-jet-responsive-nav-link>
             @auth
-                <x-jet-responsive-nav-link href="#">
+                <x-jet-responsive-nav-link href="{{route('orders')}}" >
                     {{ __('Orders') }}
                 </x-jet-responsive-nav-link>
                 <x-jet-responsive-nav-link href="{{route('cart')}}">
                     {{ __('Cart') }}
                 </x-jet-responsive-nav-link>
-                <x-jet-responsive-nav-link href="#">
-                    {{ __('Add Services') }}
+                <x-jet-responsive-nav-link href="{{route('user-services', Auth::user()->id)}}">
+                    {{ __('Your Services') }}
                 </x-jet-responsive-nav-link>
             @endauth
             @guest

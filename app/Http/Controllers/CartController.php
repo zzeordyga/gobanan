@@ -17,6 +17,10 @@ class CartController extends Controller
      */
     public function index()
     {
+        if(!Auth::user()){
+            return redirect('/login');
+        }
+
         $user_id = Auth::user()->id;
         $carts = Cart::where('user_id', $user_id)
         ->whereNull('deleted_at')

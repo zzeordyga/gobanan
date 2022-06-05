@@ -35,7 +35,7 @@
                     <div class="flex-1 flex flex-col p-4 justify-between">
                         <div class="flex flex-row space-x-4 items-center">
                             <img class="w-8 h-8 flex-shrink-0 bg-white rounded-full border" src="{{ Storage::url($service->user()->picture) }}" alt="">
-                            <h3 class="text-gray-900 text-base font-medium">{{$service->user()->name}}</h3>
+                            <a href="{{route('user', $service->user()->id)}}" class="text-gray-900 hover:text-keppel text-base font-medium">{{$service->user()->name}}</a>
                         </div>
                         <h2 class="text-gray-900 text-xl font-medium mt-2">{{$service->name}}</h2>
                         <dl class="mt-1 flex-grow flex flex-col justify-between relative bottom-0">

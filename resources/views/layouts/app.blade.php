@@ -49,7 +49,7 @@
             <footer>
                 <div class="hidden sm:flex border-t w-11/12 m-auto flex flex-row justify-between items-center p-4">
                     <div class="grayscale copyright flex flex-row justify-center items-center space-x-8">
-                        <img class="w-16 text-center" src="{{ asset('image/logo/fiverr.svg') }}">
+                        <img class="w-16 text-center" src="{{ asset('image/logo/gobanan.svg') }}">
                         <span class="text-sm sm:text-xs text-slate-400">Gobanan Co. 2022</span>
                     </div>
 
@@ -113,7 +113,7 @@
 
                 <div class="flex sm:hidden border-t w-11/12 m-auto flex flex-col justify-between items-center p-4">
                     <div class="grayscale copyright flex flex-col justify-center items-center">
-                        <img class="w-16 text-center" src="{{ asset('image/logo/fiverr.svg') }}">
+                        <img class="w-16 text-center" src="{{ asset('image/logo/gobanan.svg') }}">
                         <span class="text-sm sm:text-xs text-slate-400">Gobanan Co. 2022</span>
                     </div>
 

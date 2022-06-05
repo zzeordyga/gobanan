@@ -8,7 +8,7 @@
             <div class="flex divide-x divide-gray-200 mt-4 items-center space-x-5">
                 <div class="flex flex-row space-x-4 items-center">
                     <img class="w-8 h-8 flex-shrink-0 bg-white rounded-full border" src="{{ Storage::url($service->user()->picture) }}" alt="">
-                    <h3 class="text-gray-900 text-base font-medium">{{$service->user()->name}}</h3>
+                    <a href="{{route('user', $service->user()->id)}}" class="text-gray-900 hover:text-keppel text-base font-medium">{{$service->user()->name}}</a>
                 </div>
                 <div class="text-base px-4">
                     <i class="fa-solid fa-star text-amber-400"></i>
@@ -98,9 +98,7 @@
                                     <img class="w-8 h-8 flex-shrink-0 bg-white rounded-full border"
                                     src="{{ Storage::url($review->user()->picture) }}"
                                     alt="">
-                                    <h3 class="text-gray-900 text-base font-medium">
-                                        {{$review->user()->name}}
-                                    </h3>
+                                    <a href="{{route('user', $service->user()->id)}}" class="text-gray-900 hover:text-keppel text-base font-medium">{{$review->user()->name}}</a>
                                     <div class="text-base px-2">
                                         @for ($i = 0; $i < $review->rating; $i++)
                                             <i class="fa-solid fa-star text-amber-400"></i>

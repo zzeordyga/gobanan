@@ -8,12 +8,12 @@
         <title>{{ config('app.name', 'Laravel') }}</title>
 
         <!-- Icon -->
-        <link rel="icon" href="{{ url('image/logo/fi.png') }}"> 
-        
+        <link rel="icon" href="{{ url('image/logo/go.png') }}">
+
         <!-- Styles -->
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
         <link rel="stylesheet" href=" {{mix ('css/style.css')}}">
-  
+
 
         <!-- Scripts -->
         <script src="{{ mix('js/app.js') }}" defer></script>

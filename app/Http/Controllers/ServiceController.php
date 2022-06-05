@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Service;
+use App\Models\TransactionDetail;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ServiceController extends Controller
 {
@@ -34,6 +37,20 @@ class ServiceController extends Controller
         return view('pages.explore', [
             'services' => $services,
             'categories' => $categories,
+        ]);
+    }
+
+    /**
+     * Display all resource
+     *
+     */
+    public function userServices($id){
+        $user = User::find($id);
+        $services = Service::where('user_id', $id)->paginate(10);
+
+        return view('pages.users-service', [
+            'services' => $services,
+            'user' => $user,
         ]);
     }
 
@@ -96,6 +113,42 @@ class ServiceController extends Controller
         ]);
     }
 
+    /**
+     * Display orders for the current users.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function orders()
+    {
+        if(!Auth::user()){
+            return redirect('/login');
+        }
+
+        $user_id = Auth::user()->id;
+
+        $orders = Service::join('transaction_details', 'transaction_details.service_id', '=', 'services.id')
+        ->join('transaction_headers', 'transaction_details.header_id', '=', 'transaction_headers.id')
+        ->join('users', 'transaction_headers.user_id', '=', 'users.id')
+        ->where('services.user_id', $user_id)
+        ->where('status', 'Ongoing')
+        ->select('services.*', 'users.id as customer_id', 'users.name as customer_name', 'users.email as customer_email',
+            'transaction_details.created_at', 'transaction_details.notes', 'transaction_details.id as td_id')
+        ->get();
+
+        $purchases = Service::join('transaction_details', 'transaction_details.service_id', '=', 'services.id')
+        ->join('transaction_headers', 'transaction_details.header_id', '=', 'transaction_headers.id')
+        ->join('users', 'transaction_headers.user_id', '=', 'users.id')
+        ->where('transaction_headers.user_id', $user_id)
+        ->where('status', 'Ongoing')
+        ->select('services.*', 'users.id as user_id', 'users.name as user_name', 'users.email as user_email',
+            'transaction_details.created_at', 'transaction_details.notes')
+        ->get();
+
+        return view('pages.order', [
+            'orders' => $orders,
+            'purchases' => $purchases,
+        ]);
+    }
     /**
      * Display services based on the category id.
      *

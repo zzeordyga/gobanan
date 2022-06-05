@@ -1,1 +1,1 @@
-<img src="{{asset('image/logo/fiverr.svg')}}" alt="">
+<img src="{{asset('image/logo/gobanan.svg')}}" alt="">
