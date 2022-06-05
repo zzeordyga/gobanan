@@ -9,22 +9,18 @@
                         <img src="{{asset('image/logo/fiverr.svg')}}" alt="">
                     </a>
                 </div>
-
-                <!-- Navigation Links -->
-                {{-- <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-jet-nav-link href="{{ route('dashboard') }}">
-                        {{ __('Dashboard') }}
-                    </x-jet-nav-link>
-                </div> --}}
             </div>
 
             <div class="hidden sm:flex">
                 <!-- Navigation Links -->
                 <div class="hidden sm:flex justify-end items-center space-x-4 sm:-my-px">
-                    <form action="#" class="search-bar w-56 hover:w-max">
-                        <input type="search" placeholder="Search here..." class="hidden-search">
+                    <form action="#" class="search-bar w-56 hover:w-80">
+                        <input type="search" placeholder="Search services here..." class="hidden-search">
                         <button type="submit" class="floating-icon float-right"><i class="fa-solid fa-magnifying-glass"></i></button>
                     </form>
+                    <div class="nav-item">
+                        <a href="/" class="font-bold">Home</a>
+                    </div>
                     <div class="nav-item">
                         <a href="#" class="font-bold">Explore</a>
                     </div>
@@ -36,6 +32,17 @@
                             <a href="/register" class="font-bold px-4 py-1 mx-2 border border-gray-800 hover:border-0 rounded button-nav-item">Register</a>
                         </div>   
                     @endguest
+                    @auth
+                        <div class="nav-item">
+                            <a href="#" class="font-bold">Orders</a>
+                        </div>
+                        <div class="nav-item">
+                            <a href="#" class="font-bold">Cart</a>
+                        </div>
+                        <div class="nav-item">
+                            <a href="#" class="font-bold px-4 py-1 mx-2 border border-gray-800 hover:border-0 rounded button-nav-item">Add Service</a>
+                        </div>   
+                    @endauth
                 </div>
                 
                 @auth
@@ -160,14 +167,25 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            {{-- <x-jet-responsive-nav-link href="{{ route('dashboard') }}"
-             :active="request()->routeIs('dashboard')"
+            <x-jet-responsive-nav-link href="{{ route('dashboard') }}"
+             {{-- :active="request()->routeIs('dashboard')" --}}
              >
                 {{ __('Home') }}
-            </x-jet-responsive-nav-link> --}}
+            </x-jet-responsive-nav-link>
             <x-jet-responsive-nav-link href="#">
                 {{ __('Explore') }}
             </x-jet-responsive-nav-link>
+            @auth
+                <x-jet-responsive-nav-link href="#">
+                    {{ __('Orders') }}
+                </x-jet-responsive-nav-link>
+                <x-jet-responsive-nav-link href="#">
+                    {{ __('Cart') }}
+                </x-jet-responsive-nav-link>
+                <x-jet-responsive-nav-link href="#">
+                    {{ __('Add Services') }}
+                </x-jet-responsive-nav-link>
+            @endauth
             @guest
                 <x-jet-responsive-nav-link href="/login">
                     {{ __('Login') }}
@@ -250,8 +268,8 @@
             </div>
         @endauth
 
-        <form action="#" class="search-bar w-max mx-2 pb-4">
-            <input type="search" placeholder="Search here..." class="block leading-8 relative rounded-3xl w-full h-11">
+        <form action="#" class="search-bar w-full pb-4 px-2">
+            <input type="search" placeholder="Search for a service here..." class="block leading-8 relative rounded-3xl w-full h-11">
             <button type="submit" class="responsive-floating-icon floating-icon float-right"><i class="fa-solid fa-magnifying-glass"></i></button>
         </form>
     </div>
