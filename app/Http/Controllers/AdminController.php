@@ -2,29 +2,49 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cart;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class CartController extends Controller
+class AdminController extends Controller
 {
-        /**
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $user_id = Auth::user()->id;
-        $cart = Cart::where('user_id', $user_id)
-        ->whereNull('deleted_at')
-        ->get();
-
-        return view('pages.cart', [
-            'cart' => $cart,
-        ]);
+        return view('admin.dashboard');
     }
 
+    public function category()
+    {
+        return view('admin.category');
+    }
+
+    public function review()
+    {
+        return view('admin.review');
+    }
+
+    public function service()
+    {
+        return view('admin.service');
+    }
+
+    public function transaction()
+    {
+        return view('admin.transaction');
+    }
+
+    public function user()
+    {
+        return view('admin.user');
+    }
+
+    public function profile()
+    {
+        return view('admin.profile');
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -43,14 +63,7 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
-        $cart = new Cart();
-        $cart->user_id = Auth::user()->id;
-        $cart->service_id = $request->service_id;
-        if(isset($request->notes)) $cart->notes = $request->notes;
-
-        $cart->save();
-
-        return redirect('/cart');
+        //
     }
 
     /**

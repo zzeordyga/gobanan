@@ -29,6 +29,9 @@ class User extends Authenticatable
         'email',
         'password',
         'dob',
+        'gender',
+        'phone',
+        'picture'
     ];
 
     /**
@@ -64,15 +67,27 @@ class User extends Authenticatable
     protected $attributes = [
         'gender' => '-',
         'phone' => '-',
-        'picture' => 'profile.svg',
+        'picture' => 'profile-pictures/profile.png',
         'role' => 'member',
     ];
 
     public function carts(){
         return $this->hasMany(Cart::class);
     }
-    
+
     public function services(){
         return $this->hasMany(Service::class);
+    }
+
+    public function reviews(){
+        return $this->hasManyThrough(Review::class, Service::class);
+    }
+
+    public function reviewCount(){
+        return $this->reviews()->count();
+    }
+
+    public function reviewRating(){
+        return $this->reviews()->avg('rating');
     }
 }

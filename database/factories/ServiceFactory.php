@@ -25,7 +25,7 @@ class ServiceFactory extends Factory
             "name" => $category->name.' Service #'.$random_number,
             "description" => 'A '.$category->name.' service.',
             "price" => $price,
-            "picture" => "default.jpg",
+            "picture" => "service-images/default.jpg",
         ];
     }
 }

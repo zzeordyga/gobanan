@@ -65,3 +65,54 @@
     border-color: #38A3A5;
     transition: all 0.1s ease-in;
 }
+/*
+.overlay {
+    visibility: hidden;
+    opacity: 0;
+    transition : opacity ease 300ms;
+}
+
+.close-btn {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity ease-in-out 300ms;
+}
+
+.side-menu {
+    transform: translateX(-100%);
+    transition: ease-in-out 300ms transform;
+}
+
+.close-btn:active{
+    opacity: 1.0;
+}
+
+.close-btn:active .overlay{
+    visibility: visible;
+    opacity: 0;
+}
+
+.close-btn:active .side-menu{
+    transform: translateX(0px);
+}
+
+.hamburger-btn {
+    z-index: 999;
+}
+
+.hamburger-btn:active .close-btn {
+    visibility: visible;
+    opacity: 1.0;
+}
+
+.hamburger-btn:active .overlay {
+    opacity: 1.0;
+}
+
+.hamburger-btn:active .side-menu {
+    transform: translateX(-100%);
+}
+
+.hamburger-btn:active .sidebar {
+    display: flex;
+} */

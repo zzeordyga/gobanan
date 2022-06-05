@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Review extends Model
 {
     use HasFactory;
-    
+
     public function user(){
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->first();
     }
-    
+
     public function service(){
-        return $this->belongsTo(Service::class);
+        return $this->belongsTo(Service::class)->first();
     }
 }

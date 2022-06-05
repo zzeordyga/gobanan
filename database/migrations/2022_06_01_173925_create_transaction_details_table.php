@@ -16,9 +16,10 @@ class CreateTransactionDetailsTable extends Migration
         Schema::create('transaction_details', function (Blueprint $table) {
             $table->id();
             $table->foreign('header_id')->references('id')->on('transaction_headers');
-            $table->unsignedBigInteger('header_id');    
+            $table->unsignedBigInteger('header_id');
             $table->foreign('service_id')->references('id')->on('services');
             $table->unsignedBigInteger('service_id');
+            $table->string('notes')->nullable();
             $table->string('status');
             $table->timestamps();
         });

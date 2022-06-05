@@ -7,23 +7,24 @@
 
         <title>{{ config('app.name', 'Gobanan') }}</title>
 
-                
+
         {{--  Icon  --}}
-        <link rel="icon" href="{{ url('image/logo/fi.png') }}">
-        
+        <link rel="icon" href="{{ url('image/logo/go.png') }}">
+
         {{-- Tailwind CSS --}}
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-        
+
         {{-- Font Awesome --}}
         <link rel="stylesheet" href=" {{mix ('css/style.css')}}">
-        
+
         {{-- Self-made Styling --}}
         <link rel="stylesheet" href="{{ asset('css/index.css') }}">
-  
+
         @livewireStyles
 
         <!-- Scripts -->
         <script src="{{ mix('js/app.js') }}" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>
     </head>
     <body class="font-sans antialiased">
         <x-jet-banner />
@@ -51,7 +52,7 @@
                         <img class="w-16 text-center" src="{{ asset('image/logo/fiverr.svg') }}">
                         <span class="text-sm sm:text-xs text-slate-400">Gobanan Co. 2022</span>
                     </div>
-                    
+
                     <ul class="flex justify-around space-x-4">
                         <li class="social">
                             <a href="https://twitter.com/fiverr" target="_blank" rel="noopener" class="social-link">
@@ -115,7 +116,7 @@
                         <img class="w-16 text-center" src="{{ asset('image/logo/fiverr.svg') }}">
                         <span class="text-sm sm:text-xs text-slate-400">Gobanan Co. 2022</span>
                     </div>
-                    
+
                     <ul class="flex justify-around space-x-4 mt-2">
                         <li class="social">
                             <a href="https://twitter.com/fiverr" target="_blank" rel="noopener" class="social-link">

@@ -8,16 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class TransactionDetail extends Model
 {
     use HasFactory;
-    
+
     protected $attributes = [
         'status' => 'Ongoing',
     ];
-    
+
     public function transactionHeader(){
-        return $this->belongsTo(TransactionHeader::class);
+        return $this->belongsTo(TransactionHeader::class)->first();
     }
-    
+
     public function service(){
-        return $this->belongsTo(Service::class);
+        return $this->belongsTo(Service::class)->first();
     }
 }

@@ -20,7 +20,7 @@ class ReviewFactory extends Factory
             "service_id" => Service::inRandomOrder()->first()->id,
             "title" => "Very Good!",
             "description" => "Very much good!",
-            "rating" => mt_rand(1, 5),
+            "rating" => mt_rand(3, 5),
         ];
     }
 }

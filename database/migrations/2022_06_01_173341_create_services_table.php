@@ -16,13 +16,14 @@ class CreateServicesTable extends Migration
         Schema::create('services', function (Blueprint $table) {
             $table->id();
             $table->foreign('user_id')->references('id')->on('users');
-            $table->unsignedBigInteger('user_id');    
+            $table->unsignedBigInteger('user_id');
             $table->foreign('category_id')->references('id')->on('categories');
             $table->unsignedBigInteger('category_id');
             $table->string('name');
             $table->string('description');
             $table->decimal('price', 9, 3);
             $table->string('picture', 2048)->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
