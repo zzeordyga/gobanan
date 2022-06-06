@@ -65,13 +65,3 @@
     border-color: #38A3A5;
     transition: all 0.1s ease-in;
 }
-
-.star-radio:checked {
-    background-image: none;
-    background-color: rgb(251 146 60 / var(--tw-bg-opacity));
-}
-
-[type='checkbox']:checked:hover, [type='checkbox']:checked:focus, .star-radio:checked:hover, .star-radio:checked:focus {
-    border-color: transparent;
-    background-color: rgb(251 146 60 / var(--tw-bg-opacity));
-}

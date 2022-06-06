@@ -40,7 +40,7 @@ class ReviewController extends Controller
         $validator = Validator::make($request->all(), [
             "title" => ['required', 'string'],
             "description" => ['required', 'string', 'max:255'],
-            'rating-2' => ['required','min:1', 'max:5']
+            'rating' => ['required','min:1', 'max:5']
         ]);
 
         if($validator->fails()){
@@ -51,7 +51,7 @@ class ReviewController extends Controller
         $review->service_id = $id;
         $review->user_id = Auth::user()->id; 
         $review->title = $request->title;
-        $review->rating = $request['rating-2'];
+        $review->rating = $request['rating'];
         $review->description = $request->description;
 
         $review->save();

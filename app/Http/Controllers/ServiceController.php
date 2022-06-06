@@ -134,6 +134,7 @@ class ServiceController extends Controller
 
         return view('pages.service', [
             'service' => $service,
+            'rating' => 5,
         ]);
     }
 
