@@ -15,9 +15,9 @@ class CreateTransactionDetailsTable extends Migration
     {
         Schema::create('transaction_details', function (Blueprint $table) {
             $table->id();
-            $table->foreign('header_id')->references('id')->on('transaction_headers');
+            $table->foreign('header_id')->references('id')->on('transaction_headers')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('header_id');
-            $table->foreign('service_id')->references('id')->on('services');
+            $table->foreign('service_id')->references('id')->on('services')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('service_id');
             $table->string('notes')->nullable();
             $table->string('status');

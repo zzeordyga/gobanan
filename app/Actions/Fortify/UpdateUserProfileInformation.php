@@ -24,6 +24,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
+            'gender' => ['required'],
             'dob' => ['required', 'date', 'before:-18 years'],
             'phone' => ['nullable', 'numeric', 'min:10'],
         ],
@@ -44,6 +45,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
                 'email' => $input['email'],
                 'username' => $input['username'],
                 'dob' => $input['dob'],
+                'gender' => $input['gender'],
             ];
 
             if(isset($input['phone'])){

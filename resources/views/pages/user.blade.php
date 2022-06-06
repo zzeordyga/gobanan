@@ -23,6 +23,17 @@
                             <dt class="sr-only">Title</dt>
                             <dd class="text-gray-500 text-sm">{{$service->category()->name}}</dd>
                             </dl>
+                            
+                            <div class="self-end mt-4 text-base">
+                                <i class="fa-solid fa-star text-amber-400"></i>
+                                <span class="mt-4 font-semibold">
+                                    @if ($service->reviewCount() > 0)
+                                        {{number_format($service->reviewRating(), 2, '.', '')}} ({{$service->reviewCount()}} reviews)
+                                    @else
+                                        No reviews yet.
+                                    @endif
+                                </span>
+                            </div>
                         </div>
                         <div>
                             <div class="-mt-px flex">
@@ -44,7 +55,7 @@
                     </li>
                 @endforeach
             </ul>
-            <a class="text-lg p-6 font-bold self-end" href="{{route('user-services', $user->id)}}">
+            <a class="hover:text-keppel text-lg p-6 font-bold self-end" href="{{route('user-services', $user->id)}}">
                 View more..
             </a>
         </div>

@@ -1,10 +1,21 @@
 <x-app-layout>
     <div class="border-t-2 px-16">
         @if (count($services) > 0)
-            <div class="p-6 w-2/3 pb-0">
-                <h1 class="text-4xl font-bold">Results for "{{$keyword}}"</h1>
-                <p class="text-base text-gray-400 mt-2 font-bold">{{count($services)}} services available</p>
+
+            <div class="p-6 pb-0 flex justify-between items-center">
+                <h1 class="w-2/3 text-4xl font-bold">
+                    Results for "{{$keyword}}"
+                    <p class="text-base text-gray-400 mt-2 font-semibold">{{count($services)}} services available</p>
+                </h1>
+                <div class="flex justify-center space-x-4">
+                    @auth    
+                        <form action="{{route('create')}}">
+                            <x-jet-button>Create a Service</x-jet-button>
+                        </form>
+                    @endauth
+                </div>
             </div>
+            
             {{-- <div class="p-6 pt-2">
                 <h1 class="text-xl font-bold mb-4">Select job category</h1>
                 <div class="flex justify-start">

@@ -48,7 +48,7 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::find($id);
-        $services = Service::inRandomOrder()->limit(6)->get();
+        $services = Service::where('user_id', $id)->inRandomOrder()->limit(6)->get();
 
         return view('pages.user', [
             'user' => $user,

@@ -19,7 +19,7 @@
                 </p>
                 <div class="mt-10 max-w-sm mx-auto sm:max-w-none sm:flex sm:justify-center">
                 <div class="flex space-y-4 justify-center">
-                    <a href="#" class="flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-keppel bg-white hover:bg-emerald-50 sm:px-8">
+                    <a href="{{route('explore')}}" class="flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-keppel bg-white hover:bg-emerald-50 sm:px-8">
                     Get started
                     </a>
                 </div>
@@ -74,6 +74,17 @@
                         <dt class="sr-only">Title</dt>
                         <dd class="text-gray-500 text-sm">{{$service->category()->name}}</dd>
                         </dl>
+                        
+                        <div class="self-end mt-4 text-base">
+                            <i class="fa-solid fa-star text-amber-400"></i>
+                            <span class="mt-4 font-semibold">
+                                @if ($service->reviewCount() > 0)
+                                    {{number_format($service->reviewRating(), 2, '.', '')}} ({{$service->reviewCount()}} reviews)
+                                @else
+                                    No reviews yet.
+                                @endif
+                            </span>
+                        </div>
                     </div>
                     <div>
                         <div class="-mt-px flex">

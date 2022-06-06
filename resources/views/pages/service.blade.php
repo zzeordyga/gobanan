@@ -1,25 +1,41 @@
 <x-app-layout>
 <!-- This example requires Tailwind CSS v2.0+ -->
     <div class="bg-white shadow overflow-hidden sm:rounded-lg px-16">
-        <div class="p-4">
-            <h3 class="text-4xl font-medium text-gray-900">
-                {{$service->name}}
-            </h3>
-            <div class="flex divide-x divide-gray-200 mt-4 items-center space-x-5">
-                <div class="flex flex-row space-x-4 items-center">
-                    <img class="w-8 h-8 flex-shrink-0 bg-white rounded-full border" src="{{ Storage::url($service->user()->picture) }}" alt="">
-                    <a href="{{route('user', $service->user()->id)}}" class="text-gray-900 hover:text-keppel text-base font-medium">{{$service->user()->name}}</a>
+        <div class="flex justify-between items-center">
+            <div class="p-4">
+                <h3 class="text-4xl font-medium text-gray-900">
+                    {{$service->name}}
+                </h3>
+                <div class="flex divide-x divide-gray-200 mt-4 items-center space-x-5">
+                    <div class="flex flex-row space-x-4 items-center">
+                        <img class="w-8 h-8 flex-shrink-0 bg-white rounded-full border" src="{{ Storage::url($service->user()->picture) }}" alt="">
+                        <a href="{{route('user', $service->user()->id)}}" class="text-gray-900 hover:text-keppel text-base font-medium">{{$service->user()->name}}</a>
+                    </div>
+                    <div class="text-base px-4">
+                        <i class="fa-solid fa-star text-amber-400"></i>
+                        <span class="mt-4 font-semibold">
+                            @if ($service->reviewCount() > 0)
+                                {{number_format($service->reviewRating(), 2, '.', '')}} ({{$service->reviewCount()}} reviews)
+                            @else
+                                No reviews yet.
+                            @endif
+                        </span>
+                    </div>
                 </div>
-                <div class="text-base px-4">
-                    <i class="fa-solid fa-star text-amber-400"></i>
-                    <span class="mt-4 font-semibold">
-                        @if ($service->reviewCount() > 0)
-                            {{number_format($service->reviewRating(), 2, '.', '')}} ({{$service->reviewCount()}} reviews)
-                        @else
-                            No reviews yet.
-                        @endif
-                    </span>
-                </div>
+            </div>
+            <div class="flex justify-center space-x-4">
+                @auth
+                    @if ($service->user_id == Auth::user()->id)
+                        <form action="{{route('edit', $service->id)}}">
+                            <x-jet-button>Update</x-jet-button>
+                        </form>
+                        <form action="{{route('deleteService', $service->id)}}" method="post">
+                            @csrf
+                            @method('delete')
+                            <x-jet-button class="bg-rose-600 hover:bg-rose-800">Delete</x-jet-button>
+                        </form>
+                    @endif   
+                @endauth
             </div>
         </div>
         <div class="border-t border-gray-200 px-4 py-5 sm:px-6">

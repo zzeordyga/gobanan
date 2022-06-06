@@ -84,8 +84,8 @@
                                 <div class="flex flex-col">
                                     <h1 class="text-2xl font-bold">Payment Type</h1>
                                     <select name="payment_type" id="payment_type" class="mt-4 block appearance-none w-full border border-gray-300 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
-                                        <option>Debit</option>
-                                        <option>Credit</option>
+                                        <option value="Debit">Debit</option>
+                                        <option value="Debit">Credit</option>
                                     </select>
                                 </div>
                                 <div class="flex flex-col">

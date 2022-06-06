@@ -1,39 +1,15 @@
 <x-app-layout>
     <div class="border-t-2 px-16 h-full">
         <div class="p-6 pb-0 flex justify-between items-center">
-            <h1 class="text-4xl w-2/3 font-bold">All
-                @if (isset($curr_category))
-                    {{$curr_category->name}}
-                @endif
-                Jobs Available in Gobanan
-                
-                <p class="font-medium text-lg text-slate-800 mt-2">
-                    @if (isset($curr_category))
-                        {{$curr_category->description}}
-                    @else
-                        Find the person that could fulfill your needs here!
-                    @endif
-                </p>
+            <h1 class="text-4xl w-2/3 font-bold">
+                All Jobs from {{$user->name}} Available in Gobanan
             </h1>
-            
             <div class="flex justify-center space-x-4">
                 @auth
                     <form action="{{route('create')}}">
                         <x-jet-button>Create a Service</x-jet-button>
-                    </form>    
+                    </form>
                 @endauth
-            </div>
-        </div>
-        <div class="pt-2">
-            <h1 class="text-xl font-bold mb-4 px-6">Select job category</h1>
-            <div class="flex justify-start">
-                @foreach ($categories as $category)
-                    @if (!isset($curr_category) || $category->id != $curr_category->id)
-                        <div>
-                            <a href="{{ route('category', $category->id) }}" class="text-sm font-bold px-3 py-1 mx-2 border text-slate-500 hover:text-slate-600 border-gray-200 bg-gray-50 hover:bg-gray-200 rounded-xl">{{$category->name}}</a>
-                        </div>
-                    @endif
-                @endforeach
             </div>
         </div>
         <ul class="grid grid-cols-1 gap-12 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 my-4">

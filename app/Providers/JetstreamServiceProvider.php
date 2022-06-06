@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Actions\Jetstream\DeleteUser;
 use App\Models\User;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Fortify\Fortify;
@@ -36,6 +37,10 @@ class JetstreamServiceProvider extends ServiceProvider
             $user = User::where('email', $request->login)
             ->orWhere('username', $request->login)
             ->first();
+
+            if($request->remember){
+                Cookie::queue('mycookie', $request->login, 5);
+            }
 
             if($user && Hash::check($request->password, $user->password)){
                 return $user;

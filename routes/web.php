@@ -44,6 +44,12 @@ Route::middleware(['auth:sanctum'])->group(function() {
     Route::delete('/deleteCart', [CartController::class, 'destroy'])->name('deleteCart');
 
     Route::get('/orders', [ServiceController::class, 'orders'])->name('orders');
+    Route::get('/create', [ServiceController::class, 'create'])->name('create');
+    Route::get('/service/{id}/edit', [ServiceController::class, 'edit'])->name('edit');
+    Route::post('/addService', [ServiceController::class, 'store'])->name('store');
+    Route::patch('/updateService/{id}', [ServiceController::class, 'update'])->name('updateService');
+    Route::delete('/deleteService/{id}', [ServiceController::class, 'destroy'])->name('deleteService');
+
     Route::put('/finishOrder', [TransactionDetailController::class, 'finishOrder'])->name('finishOrder');
 });
 
@@ -55,5 +61,4 @@ Route::middleware(['admin'])->group(function(){
     Route::get('/admin/service', [AdminController::class, 'index'])->name('admin-service');
     Route::get('/admin/transaction', [AdminController::class, 'index'])->name('admin-transaction');
     Route::get('/admin/user', [AdminController::class, 'index'])->name('admin-user');
-    Route::get('/admin/profile', [AdminController::class, 'index'])->name('admin-profile');
 });

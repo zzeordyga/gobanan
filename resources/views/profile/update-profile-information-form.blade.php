@@ -115,6 +115,17 @@
             <x-jet-input-error for="email" class="mt-2" />
         </div>
 
+        {{-- Gender --}}
+        <div class="col-span-6 sm:col-span-4">
+            <x-jet-label for="gender" value="{{ __('Gender') }}" />
+            <select name="gender" id="gender" wire:model.defer="state.gender" class="mt-4 block appearance-none w-full border border-gray-300 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+                <option  {{ $this->user->gender== '-' ? 'selected' : '' }} value="-">-</option>
+                <option {{ $this->user->gender== 'Male' ? 'selected' : '' }} value="Male">Male</option>
+                <option {{ $this->user->gender== 'Female' ? 'selected' : '' }} value="Female">Female</option>
+            </select>
+            <x-jet-input-error for="gender" class="mt-2" />
+        </div>
+
         {{-- Date of Birth --}}
         <div class="col-span-6 sm:col-span-4">
             <x-jet-label for="dob" value="{{ __('Date of Birth') }}" />

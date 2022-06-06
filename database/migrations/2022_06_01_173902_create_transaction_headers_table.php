@@ -15,7 +15,7 @@ class CreateTransactionHeadersTable extends Migration
     {
         Schema::create('transaction_headers', function (Blueprint $table) {
             $table->id();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('user_id');
             $table->string('payment_type');  
             $table->timestamps();
