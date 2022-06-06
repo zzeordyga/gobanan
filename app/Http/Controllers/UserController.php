@@ -56,6 +56,23 @@ class UserController extends Controller
         ]);
     }
 
+    public function makeAdmin($id){
+        $user = User::find($id);
+
+        $user->role = 'admin';
+        $user->save();
+
+        return redirect()->back();
+    }
+
+    public function makeMember($id){
+        $user = User::find($id);
+
+        $user->role = 'member';
+        $user->save();
+
+        return redirect()->back();
+    }
     /**
      * Show the form for editing the specified resource.
      *

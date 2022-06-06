@@ -27,6 +27,7 @@
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^6.1.1",
+        "daisyui": "^2.15.2",
         "tw-elements": "^1.0.0-alpha12"
     }
 }

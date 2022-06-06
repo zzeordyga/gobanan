@@ -136,6 +136,77 @@
                     @endif
                 </ul>
             </dd>
+            <dt class="font-medium text-gray-500">
+                <h1 class="text-xl">Create Review</h1>
+            </dt>
+            <hr>
+
+            <dd class="mt-1 text-sm text-gray-900">
+                <div class="max-w-7xl mx-auto">
+                    <form action="{{route('store-review', $service->id)}}" class="space-y-8 divide-gray-200" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
+                        <div class="space-y-8 divide-y divide-gray-200">
+                        <div>
+                            <div>
+                            @if($errors->any())
+                                <ul class="list-disc font-medium mt-4 px-4 sm:px-6 lg:px-8">
+                                    @foreach ($errors->all() as $message)
+                                    <li class="text-rose-600">
+                                        <strong>{{$message}}</strong>
+                                    </li>
+                                    @endforeach
+                                </ul>
+                            @endif
+                            </div>
+                    
+                            <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                            
+                                <div class="sm:col-span-4">
+                                <label for="name" class="block text-sm font-medium text-gray-700">
+                                    Rating
+                                </label>
+                                
+                                <div class="rating mt-2">
+                                    <input type="radio" name="rating-2" value="1" class="star-radio mask mask-star-2 bg-orange-400" />
+                                    <input type="radio" name="rating-2" value="2" class="star-radio mask mask-star-2 bg-orange-400" checked />
+                                    <input type="radio" name="rating-2" value="3" class="star-radio mask mask-star-2 bg-orange-400" />
+                                    <input type="radio" name="rating-2" value="4" class="star-radio mask mask-star-2 bg-orange-400" />
+                                    <input type="radio" name="rating-2" value="5" class="star-radio mask mask-star-2 bg-orange-400" />
+                                </div>
+                            </div>
+
+                            <div class="sm:col-span-4">
+                                <label for="name" class="block text-sm font-medium text-gray-700">
+                                    Title
+                                </label>
+                                <div class="mt-1 flex rounded-md shadow-sm">
+                                <input required type="text" name="title" id="title" autocomplete="title" class="flex-1 focus:ring-keppel focus:border-keppel block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300">
+                                </div>
+                            </div>
+                    
+                            <div class="sm:col-span-6">
+                                <label for="description" class="block text-sm font-medium text-gray-700">
+                                    Description
+                                </label>
+                                <div class="mt-1">
+                                <textarea required id="description" name="description" rows="3" class="shadow-sm focus:ring-keppel focus:border-keppel block w-full sm:text-sm border-gray-300 rounded-md"></textarea>
+                                </div>
+                                <p class="mt-2 text-sm text-gray-500">Write a paragraph to explain this category.</p>
+                            </div>
+                    
+                        </div>
+                    
+                        <div class="pt-5">
+                        <div class="flex justify-end">
+                            <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-keppel hover:bg-metallic-blue focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-keppel">
+                            Save
+                            </button>
+                        </div>
+                        </div>
+                    </form>              
+                </div>
+            </dd>
             </div>
         </dl>
         </div>

@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', "Users")
+@section('title', "Transactions Details")
 
 @section('content')
     <!-- This example requires Tailwind CSS v2.0+ -->
@@ -15,78 +15,45 @@
                     ID
                 </th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Username
+                    Service Name
                 </th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Name
+                    Notes
                 </th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Email
+                    Status
                 </th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Date of Birth
+                    Created At
                 </th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Gender
-                </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Phone
-                </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Role
-                </th>
-                <th scope="col" class="relative px-6 py-3">
-                    <span class="sr-only">Make Admin</span>
+                    Updated At
                 </th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-                @foreach ($users as $user)
+                @foreach ($transactions as $transaction)
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                            {{$user->id}}
+                            {{$transaction->id}}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                            {{$user->username}}
+                            {{$transaction->name}}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {{$user->name}}
+                            {{$transaction->notes != null ? $transaction->notes : '-'}}
                         </td>
                         
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {{$user->email}}
+                            {{$transaction->status}}
                         </td>
                         
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {{date('d-m-Y', strtotime($user->dob))}}
+                            {{date('d-m-Y', strtotime($transaction->created_at))}}
                         </td>
                         
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {{$user->gender}}
-                        </td>
-                        
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {{$user->phone}}
-                        </td>
-
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {{$user->role}}
-                        </td>
-
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            @if ($user->role != 'admin')
-                                <form action="{{route('make-user-admin', $user->id)}}" method="POST">
-                                    @csrf
-                                    @method('patch')
-                                    <button type="submit" class="font-semibold text-keppel hover:text-blue-metallic">Make Admin</button>
-                                </form>
-                            @else
-                            <form action="{{route('make-user-member', $user->id)}}" method="POST">
-                                @csrf
-                                @method('patch')
-                                <button type="submit" class="font-semibold text-rose-600 hover:text-rose-700">Make Member</button>
-                            </form>
-                            @endif    
+                            {{date('d-m-Y', strtotime($transaction->updated_at))}}
                         </td>
                     </tr>
                 @endforeach
@@ -94,7 +61,7 @@
             </table>
         </div>
             <div class="mt-2">
-                {{ $users->links() }}
+                {{ $transactions->links() }}
             </div>
         </div>
     </div>

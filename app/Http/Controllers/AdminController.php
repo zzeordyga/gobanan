@@ -2,7 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Review;
+use App\Models\Service;
+use App\Models\TransactionDetail;
+use App\Models\TransactionHeader;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -18,32 +25,65 @@ class AdminController extends Controller
 
     public function category()
     {
-        return view('admin.category');
+        $categories = Category::paginate(8);
+
+        return view('admin.category', [
+            "categories" => $categories,
+        ]);
     }
 
     public function review()
     {
-        return view('admin.review');
+        $reviews = Review::paginate(8);
+
+        return view('admin.review', [
+            "reviews" => $reviews,
+        ]);
     }
 
     public function service()
     {
-        return view('admin.service');
+        $services = Service::paginate(8);
+
+        return view('admin.service', [
+            "services" => $services,
+        ]);
     }
 
     public function transaction()
     {
-        return view('admin.transaction');
+        $transactions = TransactionHeader::join('users', 'users.id', '=', 'transaction_headers.user_id')
+        ->select('transaction_headers.*', 'users.name as name')
+        ->paginate(8);
+
+        return view('admin.transaction', [
+            "transactions" => $transactions,
+        ]);
+    }
+
+    public function transactionDetail()
+    {
+        $transactions = TransactionDetail::join('services', 'services.id', '=', 'transaction_details.service_id')
+        ->select('transaction_details.*', 'services.name as name')
+        ->paginate(8);
+
+        return view('admin.transaction-detail', [
+            "transactions" => $transactions,
+        ]);
     }
 
     public function user()
     {
-        return view('admin.user');
+        $users = User::where('id' , '<>', Auth::user()->id)->paginate(8);
+
+        return view('admin.user', [
+            "users" => $users,
+        ]);
     }
 
     public function profile()
     {
-        return view('admin.profile');
+        return redirect()->route('profile.show') ;
     }
     /**
      * Show the form for creating a new resource.

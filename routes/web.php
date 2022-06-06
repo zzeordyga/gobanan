@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\TransactionDetailController;
 use App\Http\Controllers\UserController;
@@ -46,6 +48,7 @@ Route::middleware(['auth:sanctum'])->group(function() {
     Route::get('/orders', [ServiceController::class, 'orders'])->name('orders');
     Route::get('/create', [ServiceController::class, 'create'])->name('create');
     Route::get('/service/{id}/edit', [ServiceController::class, 'edit'])->name('edit');
+    Route::post('/service/{id}/addReview', [ReviewController::class, 'store'])->name('store-review');
     Route::post('/addService', [ServiceController::class, 'store'])->name('store');
     Route::patch('/updateService/{id}', [ServiceController::class, 'update'])->name('updateService');
     Route::delete('/deleteService/{id}', [ServiceController::class, 'destroy'])->name('deleteService');
@@ -56,9 +59,22 @@ Route::middleware(['auth:sanctum'])->group(function() {
 // Admin Middleawre
 Route::middleware(['admin'])->group(function(){
     Route::get('/admin', [AdminController::class, 'index'])->name('admin-dashboard');
-    Route::get('/admin/category', [AdminController::class, 'index'])->name('admin-category');
-    Route::get('/admin/review', [AdminController::class, 'index'])->name('admin-review');
-    Route::get('/admin/service', [AdminController::class, 'index'])->name('admin-service');
-    Route::get('/admin/transaction', [AdminController::class, 'index'])->name('admin-transaction');
-    Route::get('/admin/user', [AdminController::class, 'index'])->name('admin-user');
+    Route::get('/admin/category', [AdminController::class, 'category'])->name('admin-category');
+    Route::get('/admin/review', [AdminController::class, 'review'])->name('admin-review');
+    Route::get('/admin/service', [AdminController::class, 'service'])->name('admin-service');
+    
+    Route::get('/admin/transaction', [AdminController::class, 'transaction'])->name('admin-transaction');
+    Route::get('/admin/transaction/{id}/details', [AdminController::class, 'transactionDetail'])->name('admin-transaction-detail');
+
+    Route::get('/admin/user', [AdminController::class, 'user'])->name('admin-user');
+
+    Route::get('/admin/category/create', [CategoryController::class, 'create'])->name('create-category');
+    Route::get('/admin/category/edit/{id}', [CategoryController::class, 'edit'])->name('edit-category');
+    
+    Route::post('/admin/category/store', [CategoryController::class, 'store'])->name('store-category');
+    Route::patch('/admin/category/update/{id}', [CategoryController::class, 'update'])->name('update-category');
+    Route::patch('/admin/user/makeAdmin/{id}', [UserController::class, 'makeAdmin'])->name('make-user-admin');
+    Route::patch('/admin/user/makeMember/{id}', [UserController::class, 'makeMember'])->name('make-user-member');
+    
+    Route::delete('/admin/category/delete/{id}', [CategoryController::class, 'destroy'])->name('delete-category');
 });

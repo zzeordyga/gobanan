@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
 {
@@ -23,7 +25,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.add-category');
     }
 
     /**
@@ -34,7 +36,22 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            "name" => ['required', 'string'],
+            "description" => ['required', 'string', 'max:255']
+        ]);
+
+        if($validator->fails()){
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $category = new Category();
+        $category->name = $request->name;
+        $category->description = $request->description;
+
+        $category->save();
+
+        return redirect()->route('admin-category');
     }
 
     /**
@@ -56,7 +73,11 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $category = Category::find($id);
+
+        return view('admin.edit-category', [
+            'category' => $category,
+        ]);
     }
 
     /**
@@ -68,7 +89,22 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            "name" => ['required', 'string'],
+            "description" => ['required', 'string', 'max:255']
+        ]);
+
+        if($validator->fails()){
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $category = Category::find($id);
+        $category->name = $request->name;
+        $category->description = $request->description;
+
+        $category->save();
+
+        return redirect()->route('admin-category');
     }
 
     /**
@@ -80,5 +116,10 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         //
+        $category = Category::find($id);
+
+        $category->delete();
+
+        return redirect()->route('admin-category');
     }
 }
