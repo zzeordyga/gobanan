@@ -12,7 +12,7 @@
             <div>
                 <div>
                 <h3 class="text-4xl leading-6 font-medium text-gray-900">
-                    Create a Category
+                    Update a Category
                 </h3>
                 @if($errors->any())
                     <ul class="list-disc font-medium mt-4 px-4 sm:px-6 lg:px-8">
@@ -24,7 +24,7 @@
                     </ul>
                 @endif
                 </div>
-        
+
                 <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
                 <div class="sm:col-span-4">
                     <label for="name" class="block text-sm font-medium text-gray-700">
@@ -34,7 +34,7 @@
                     <input value="{{$category->name}}" required type="text" name="name" id="name" autocomplete="name" class="flex-1 focus:ring-keppel focus:border-keppel block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300">
                     </div>
                 </div>
-        
+
                 <div class="sm:col-span-6">
                     <label for="description" class="block text-sm font-medium text-gray-700">
                         Description
@@ -44,9 +44,9 @@
                     </div>
                     <p class="mt-2 text-sm text-gray-500">Write a paragraph to explain this category.</p>
                 </div>
-        
+
             </div>
-        
+
             <div class="pt-5">
             <div class="flex justify-end">
                 <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-keppel hover:bg-metallic-blue focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-keppel">
@@ -54,6 +54,6 @@
                 </button>
             </div>
             </div>
-        </form>              
+        </form>
     </div>
 @endsection

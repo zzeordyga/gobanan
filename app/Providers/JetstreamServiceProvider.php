@@ -39,7 +39,7 @@ class JetstreamServiceProvider extends ServiceProvider
             ->first();
 
             if($request->remember){
-                Cookie::queue('mycookie', $request->login, 5);
+                Cookie::queue('mycookie', $request->login, 120);
             }
 
             if($user && Hash::check($request->password, $user->password)){
