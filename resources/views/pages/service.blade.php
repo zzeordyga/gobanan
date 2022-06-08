@@ -27,14 +27,14 @@
                 @auth
                     @if ($service->user_id == Auth::user()->id)
                         <form action="{{route('edit', $service->id)}}">
-                            <x-jet-button>Update</x-jet-button>
+                            <x-jet-button class="bg-amber-400">Update</x-jet-button>
                         </form>
                         <form action="{{route('deleteService', $service->id)}}" method="post">
                             @csrf
                             @method('delete')
                             <x-jet-button class="bg-rose-600 hover:bg-rose-800">Delete</x-jet-button>
                         </form>
-                    @endif   
+                    @endif
                 @endauth
             </div>
         </div>
@@ -75,7 +75,7 @@
                                 <h1 class="text-xl font-medium">Notes</h1>
                                 <input type="hidden" name="service_id" value="{{$service->id}}">
                                 <input class="mt-4 rounded border w-full" type="text" name="notes" id="notes" placeholder="Add some additional requests here..">
-                                <button class="text-xl font-bold mt-4 text-center w-full border bg-keppel p-4 rounded-lg" type="submit">Add To Cart</button>
+                                <button class="text-white text-xl font-bold mt-4 text-center w-full border bg-ocean-green hover:bg-keppel p-4 rounded-lg" type="submit">Add To Cart</button>
                             </div>
                         </div>
                       </form>
@@ -161,12 +161,12 @@
                                     </ul>
                                 @endif
                                 </div>
-                        
+
                                 <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-                                
+
                                     <div class="sm:col-span-4">
-                                    
-                                    <div class="sm:col-span-4"> 
+
+                                    <div class="sm:col-span-4">
                                         <label for="rating" class="block text-sm font-medium text-gray-700">Overall Experience</label>
                                         <select id="rating" name="rating" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                                             <option value="1">Very Bad</option>
@@ -177,7 +177,7 @@
                                         </select>
                                       </div>
                                 </div>
-    
+
                                 <div class="sm:col-span-4">
                                     <label for="name" class="block text-sm font-medium text-gray-700">
                                         Title
@@ -186,7 +186,7 @@
                                     <input required type="text" name="title" id="title" autocomplete="title" class="flex-1 focus:ring-keppel focus:border-keppel block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300">
                                     </div>
                                 </div>
-                        
+
                                 <div class="sm:col-span-6">
                                     <label for="description" class="block text-sm font-medium text-gray-700">
                                         Description
@@ -196,9 +196,9 @@
                                     </div>
                                     <p class="mt-2 text-sm text-gray-500">Please elaborate what you felt after acquiring this service.</p>
                                 </div>
-                        
+
                             </div>
-                        
+
                             <div class="pt-5">
                             <div class="flex justify-end">
                                 <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-keppel hover:bg-metallic-blue focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-keppel">
@@ -206,9 +206,9 @@
                                 </button>
                             </div>
                             </div>
-                        </form>              
+                        </form>
                     </div>
-                </dd>                    
+                </dd>
                 @endif
             @endauth
             </div>

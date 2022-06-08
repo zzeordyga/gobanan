@@ -89,7 +89,7 @@
                                     </select>
                                 </div>
                                 <div class="flex flex-col">
-                                    <button class="text-xl font-bold mt-4 text-center w-full border bg-keppel p-4 rounded-lg" type="submit">Checkout</button>
+                                    <button class="text-white text-xl font-bold mt-4 text-center w-full border bg-ocean-green hover:bg-keppel p-4 rounded-lg" type="submit">Checkout</button>
                                 </div>
                             </div>
                         </form>

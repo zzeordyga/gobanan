@@ -85,7 +85,7 @@ class ServiceController extends Controller
         if(!Auth::user()){
             return redirect('/login');
         }
-        
+
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:255'],
@@ -97,7 +97,7 @@ class ServiceController extends Controller
         if($validator->fails()){
             return back()->withErrors($validator)->withInput();
         }
-        
+
         $file = $request->file('picture');
 
         $image_name = time().'.'.$file->getClientOriginalExtension();
@@ -251,7 +251,7 @@ class ServiceController extends Controller
         if(!Auth::user()){
             return redirect('/login');
         }
-        
+
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:255'],
@@ -263,7 +263,7 @@ class ServiceController extends Controller
         if($validator->fails()){
             return back()->withErrors($validator)->withInput();
         }
-        
+
         $file = $request->file('picture');
 
         $service = Service::find($id);
@@ -272,8 +272,8 @@ class ServiceController extends Controller
         $service->description = $request->description != null ? $request->description : $service->description;
         $service->price = $request->price != null ? $request->price : $service->price;
         $service->category_id = $request->category != null ? $request->category : $service->category_id;
-        
-        if($file != null){    
+
+        if($file != null){
             $image_name = time().'.'.$file->getClientOriginalExtension();
             Storage::putFileAs('public/service-images', $file, $image_name);
             $image_name = 'service-images/'.$image_name;
@@ -298,7 +298,7 @@ class ServiceController extends Controller
         $service = Service::find($id);
 
         if(isset($service)){
-            if($service->picture != 'service-images/default.jpg') Storage::delete('public/'.$service->picture);
+            // if($service->picture != 'service-images/default.jpg') Storage::delete('public/'.$service->picture);
             $service->delete();
         }
 
