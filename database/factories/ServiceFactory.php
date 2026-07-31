@@ -3,31 +3,24 @@
 namespace Database\Factories;
 
 use App\Models\Category;
+use App\Models\Service;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @extends Factory<Service>
+ */
 class ServiceFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    public function definition(): array
     {
-        $category = Category::inRandomOrder()->first();
-        $random_number = random_int(1, 10000);
-        $price = mt_rand(40, 10000)/10;
-
-        $image_name = $category->id;
-
         return [
-            "user_id" => User::inRandomOrder()->first()->id,
-            "category_id" => $category->id,
-            "name" => $category->name.' Service #'.$random_number,
-            "description" => 'A '.$category->name.' service.',
-            "price" => $price,
-            "picture" => "service-images/".$image_name.".jpg",
+            'user_id' => User::query()->inRandomOrder()->value('id') ?? User::factory(),
+            'category_id' => Category::query()->inRandomOrder()->value('id') ?? Category::factory(),
+            'name' => ucwords(fake()->words(rand(2, 5), true)),
+            'description' => fake()->paragraphs(rand(1, 3), true),
+            'price' => fake()->randomFloat(3, 5, 1500),
+            'picture' => null,
         ];
     }
 }

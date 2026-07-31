@@ -5,149 +5,129 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Review;
 use App\Models\Service;
-use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class AdminController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index(): Response
     {
-        return view('admin.dashboard');
-    }
-
-    public function category()
-    {
-        $categories = Category::paginate(8);
-
-        return view('admin.category', [
-            "categories" => $categories,
+        return Inertia::render('Admin/Index', [
+            'stats' => [
+                'users' => User::query()->count(),
+                'services' => Service::query()->count(),
+                'categories' => Category::query()->count(),
+                'transactions' => TransactionHeader::query()->count(),
+                'reviews' => Review::query()->count(),
+            ],
         ]);
     }
 
-    public function review()
+    public function categories(): Response
     {
-        $reviews = Review::paginate(8);
+        $categories = Category::query()
+            ->withCount('services')
+            ->latest()
+            ->paginate(10)
+            ->through(fn (Category $c) => [
+                'id' => $c->id,
+                'name' => $c->name,
+                'description' => $c->description,
+                'servicesCount' => $c->services_count,
+                'timesVisited' => $c->times_visited,
+            ]);
 
-        return view('admin.review', [
-            "reviews" => $reviews,
+        return Inertia::render('Admin/Categories/Index', ['categories' => $categories]);
+    }
+
+    public function reviews(): Response
+    {
+        $reviews = Review::query()
+            ->with(['user:id,name', 'service:id,name'])
+            ->latest()
+            ->paginate(10)
+            ->through(fn (Review $r) => [
+                'id' => $r->id,
+                'title' => $r->title,
+                'rating' => $r->rating,
+                'user' => $r->user?->only(['id', 'name']),
+                'service' => $r->service?->only(['id', 'name']),
+            ]);
+
+        return Inertia::render('Admin/Reviews', ['reviews' => $reviews]);
+    }
+
+    public function services(): Response
+    {
+        $services = Service::query()
+            ->with(['user:id,name', 'category:id,name'])
+            ->latest()
+            ->paginate(10)
+            ->through(fn (Service $s) => [
+                'id' => $s->id,
+                'name' => $s->name,
+                'price' => (float) $s->price,
+                'user' => $s->user?->only(['id', 'name']),
+                'category' => $s->category?->only(['id', 'name']),
+            ]);
+
+        return Inertia::render('Admin/Services', ['services' => $services]);
+    }
+
+    public function transactions(): Response
+    {
+        $headers = TransactionHeader::query()
+            ->with(['user:id,name', 'details'])
+            ->latest()
+            ->paginate(10)
+            ->through(fn (TransactionHeader $h) => [
+                'id' => $h->id,
+                'paymentType' => $h->payment_type,
+                'items' => $h->details->count(),
+                'user' => $h->user?->only(['id', 'name']),
+            ]);
+
+        return Inertia::render('Admin/Transactions/Index', ['headers' => $headers]);
+    }
+
+    public function transactionDetails(int $id): Response
+    {
+        $header = TransactionHeader::query()
+            ->whereKey($id)
+            ->with(['user:id,name', 'details.service.user:id,name', 'details.service.category:id,name'])
+            ->firstOrFail();
+
+        return Inertia::render('Admin/Transactions/Show', [
+            'header' => [
+                'id' => $header->id,
+                'paymentType' => $header->payment_type,
+                'user' => $header->user?->only(['id', 'name']),
+                'details' => $header->details->map(fn ($d) => [
+                    'id' => $d->id,
+                    'status' => $d->status,
+                    'notes' => $d->notes,
+                    'service' => $d->service?->only(['id', 'name']),
+                    'seller' => $d->service?->user?->only(['id', 'name']),
+                ]),
+            ],
         ]);
     }
 
-    public function service()
+    public function users(): Response
     {
-        $services = Service::paginate(8);
+        $users = User::query()
+            ->latest()
+            ->paginate(10)
+            ->through(fn (User $u) => [
+                'id' => $u->id,
+                'name' => $u->name,
+                'username' => $u->username,
+                'email' => $u->email,
+                'role' => $u->role,
+            ]);
 
-        return view('admin.service', [
-            "services" => $services,
-        ]);
-    }
-
-    public function transaction()
-    {
-        $transactions = TransactionHeader::join('users', 'users.id', '=', 'transaction_headers.user_id')
-        ->select('transaction_headers.*', 'users.name as name')
-        ->paginate(8);
-
-        return view('admin.transaction', [
-            "transactions" => $transactions,
-        ]);
-    }
-
-    public function transactionDetail()
-    {
-        $transactions = TransactionDetail::join('services', 'services.id', '=', 'transaction_details.service_id')
-        ->select('transaction_details.*', 'services.name as name')
-        ->paginate(8);
-
-        return view('admin.transaction-detail', [
-            "transactions" => $transactions,
-        ]);
-    }
-
-    public function user()
-    {
-        $users = User::where('id' , '<>', Auth::user()->id)->paginate(8);
-
-        return view('admin.user', [
-            "users" => $users,
-        ]);
-    }
-
-    public function profile()
-    {
-        return redirect()->route('profile.show') ;
-    }
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return Inertia::render('Admin/Users', ['users' => $users]);
     }
 }

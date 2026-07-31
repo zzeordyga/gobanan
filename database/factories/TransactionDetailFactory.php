@@ -3,24 +3,22 @@
 namespace Database\Factories;
 
 use App\Models\Service;
+use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @extends Factory<TransactionDetail>
+ */
 class TransactionDetailFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    public function definition(): array
     {
-        $statuses = ["Done", "Ongoing"];
-
         return [
-            "header_id" => TransactionHeader::inRandomOrder()->first()->id,
-            "service_id" => Service::inRandomOrder()->first()->id,
-            "status" => $statuses[array_rand($statuses)],
+            'header_id' => TransactionHeader::query()->inRandomOrder()->value('id') ?? TransactionHeader::factory(),
+            'service_id' => Service::query()->inRandomOrder()->value('id') ?? Service::factory(),
+            'notes' => fake()->optional(0.3)->sentence(),
+            'status' => fake()->randomElement(['Ongoing', 'Done']),
         ];
     }
 }

@@ -5,148 +5,98 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class CartController extends Controller
 {
-        /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index(): Response
     {
-        if(!Auth::user()){
-            return redirect('/login');
-        }
+        $carts = Cart::query()
+            ->where('user_id', auth()->id())
+            ->with(['service.user:id,name', 'service.category:id,name'])
+            ->latest()
+            ->get()
+            ->map(fn (Cart $c) => [
+                'id' => $c->id,
+                'notes' => $c->notes,
+                'service' => [
+                    'id' => $c->service?->id,
+                    'name' => $c->service?->name,
+                    'price' => (float) $c->service?->price,
+                    'picture' => $c->service?->pictureUrl(),
+                    'seller' => ['id' => $c->service?->user?->id, 'name' => $c->service?->user?->name],
+                ],
+            ]);
 
-        $user_id = Auth::user()->id;
-        $carts = Cart::where('user_id', $user_id)
-        ->whereNull('deleted_at')
-        ->get();
+        $total = $carts->sum(fn (array $c) => $c['service']['price'] ?? 0);
 
-        $total = 0;
+        return Inertia::render('Cart', ['carts' => $carts, 'total' => $total]);
+    }
 
-        foreach ($carts as $cart) {
-            $total += $cart->service()->price;
-        }
-
-        return view('pages.cart', [
-            'carts' => $carts,
-            'total' => $total,
+    public function store(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'service_id' => ['required', 'exists:services,id'],
+            'notes' => ['nullable', 'string', 'max:500'],
         ]);
+
+        Cart::create([
+            'user_id' => auth()->id(),
+            'service_id' => $data['service_id'],
+            'notes' => $data['notes'] ?? null,
+        ]);
+
+        return to_route('cart.index')->with('status', 'Added to cart.');
     }
 
-    /**
-     * Create a new transaction
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create(Request $request)
+    public function destroy(Request $request): RedirectResponse
     {
-        if(!Auth::user()){
-            return redirect('/error');
-        }
+        $data = $request->validate(['id' => ['required', 'exists:carts,id']]);
 
-        $user_id = Auth::user()->id;
-        $payment_type = $request->payment_type;
-
-        $cartQuery = Cart::where('user_id', $user_id)
-        ->whereNull('deleted_at');
-
-        $carts = $cartQuery->get();
-
-        $transaction_header = new TransactionHeader();
-        $transaction_header->user_id = $user_id;
-        $transaction_header->payment_type = $payment_type;
-
-        $transaction_header->save();
-
-        foreach ($carts as $cart) {
-            $transaction_detail = new TransactionDetail();
-            $transaction_detail->header_id = $transaction_header->id;
-            $transaction_detail->service_id = $cart->service()->id;
-            $transaction_detail->status = "Ongoing";
-            if(isset($cart->notes)) $transaction_detail->notes = $cart->notes;
-
-            $transaction_detail->save();
-        }
-
-        $cartQuery->delete();
-
-        return redirect('/');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $cart = new Cart();
-        $cart->user_id = Auth::user()->id;
-        $cart->service_id = $request->service_id;
-        if(isset($request->notes)) $cart->notes = $request->notes;
-
-        $cart->save();
-
-        return redirect('/cart');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Request $request)
-    {
-        if(!Auth::user()){
-            return redirect('/error');
-        }
-
-        $id = $request->id;
-        $cart = Cart::find($id);
+        $cart = Cart::query()->whereKey($data['id'])->first();
+        abort_unless($cart && $cart->user_id === (int) auth()->id(), 403);
 
         $cart->delete();
 
-        return redirect()->back();
+        return to_route('cart.index')->with('status', 'Removed from cart.');
+    }
+
+    public function checkout(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'payment_type' => ['required', 'string', 'in:Debit,Credit,Bank Transfer,E-Wallet'],
+        ]);
+
+        $carts = Cart::query()
+            ->where('user_id', auth()->id())
+            ->with('service')
+            ->get();
+
+        if ($carts->isEmpty()) {
+            return to_route('cart.index')->with('status', 'Your cart is empty.');
+        }
+
+        DB::transaction(function () use ($carts, $data) {
+            $header = TransactionHeader::create([
+                'user_id' => auth()->id(),
+                'payment_type' => $data['payment_type'],
+            ]);
+
+            foreach ($carts as $cart) {
+                TransactionDetail::create([
+                    'header_id' => $header->id,
+                    'service_id' => $cart->service_id,
+                    'notes' => $cart->notes,
+                    'status' => 'Ongoing',
+                ]);
+                $cart->delete();
+            }
+        });
+
+        return to_route('orders')->with('status', 'Checkout complete.');
     }
 }

@@ -2,26 +2,21 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Fortify\TwoFactorAuthenticatable;
-use Laravel\Jetstream\HasProfilePhoto;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
-    use HasApiTokens;
-    use HasFactory;
-    use HasProfilePhoto;
-    use Notifiable;
-    use TwoFactorAuthenticatable;
+    /** @use HasFactory<UserFactory> */
+    use HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var string[]
+     * @var list<string>
      */
     protected $fillable = [
         'username',
@@ -31,63 +26,100 @@ class User extends Authenticatable
         'dob',
         'gender',
         'phone',
-        'picture'
+        'role',
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array
+     * @var list<string>
      */
     protected $hidden = [
         'password',
         'remember_token',
-        'two_factor_recovery_codes',
-        'two_factor_secret',
     ];
 
     /**
-     * The attributes that should be cast.
-     *
-     * @var array
+     * @return array<string, string>
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+            'dob' => 'date',
+        ];
+    }
 
     /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
+     * @return HasMany<Cart, $this>
      */
-    protected $appends = [
-        'profile_photo_url',
-    ];
-
-    protected $attributes = [
-        'gender' => '-',
-        'phone' => '-',
-        'picture' => 'profile-pictures/profile.png',
-        'role' => 'member',
-    ];
-
-    public function carts(){
+    public function carts(): HasMany
+    {
         return $this->hasMany(Cart::class);
     }
 
-    public function services(){
+    /**
+     * @return HasMany<Service, $this>
+     */
+    public function services(): HasMany
+    {
         return $this->hasMany(Service::class);
     }
 
-    public function reviews(){
+    /**
+     * @return HasManyThrough<Review, Service, $this>
+     */
+    public function reviews(): HasManyThrough
+    {
         return $this->hasManyThrough(Review::class, Service::class);
     }
 
-    public function reviewCount(){
-        return $this->reviews()->count();
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
     }
 
-    public function reviewRating(){
-        return $this->reviews()->avg('rating');
+    public function reviewCount(): int
+    {
+        return (int) $this->reviews()->count();
+    }
+
+    public function reviewRating(): float
+    {
+        return (float) round((float) $this->reviews()->avg('rating') ?? 0, 2);
+    }
+
+    /**
+     * @return array{id: int, name: string, picture: string|null} An array summary
+     *                                                            of the user suitable for card layouts. Avoids N+1 by relying on eager
+     *                                                            loading by the caller when needed.
+     */
+    public function toCard(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'picture' => $this->picture ? Storage::url($this->picture) : null,
+        ];
+    }
+
+    /**
+     * Resolved profile picture URL (storage-aware). Falls back to a default
+     * avatar generated from the user's initials when no picture is set.
+     */
+    public function profilePictureUrl(): string
+    {
+        if ($this->picture && $this->picture !== 'profile-pictures/profile.png') {
+            return Storage::url($this->picture);
+        }
+
+        $initials = strtoupper(substr($this->name, 0, 1));
+        $hue = crc32($this->name) % 360;
+
+        return 'data:image/svg+xml,'.rawurlencode(
+            '<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96">'
+            .'<rect width="96" height="96" rx="48" fill="hsl('.$hue.',45%,45%)"/>'
+            .'<text x="50%" y="54%" text-anchor="middle" fill="#fff" font-size="40" font-family="system-ui">'.$initials.'</text>'
+            .'</svg>'
+        );
     }
 }

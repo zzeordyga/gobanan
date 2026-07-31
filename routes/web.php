@@ -3,78 +3,60 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\TransactionDetailController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-Route::get('/', [ServiceController::class, 'index'])->name('dashboard');
+Route::get('/', [ServiceController::class, 'index'])->name('home');
 
 Route::get('/explore', [ServiceController::class, 'explore'])->name('explore');
-
-Route::get('/service/{id}', [ServiceController::class, 'show'])->name('service');
-
-Route::get('/category/{id}', [ServiceController::class, 'category'])->name('category');
-
+Route::get('/services/{id}', [ServiceController::class, 'show'])->name('services.show')->whereNumber('id');
+Route::get('/category/{id}', [ServiceController::class, 'category'])->name('category')->whereNumber('id');
 Route::get('/search', [ServiceController::class, 'search'])->name('search');
+Route::get('/u/{id}', [ServiceController::class, 'userServices'])->name('users.show')->whereNumber('id');
 
-Route::get('/user/{id}', [UserController::class, 'show'])->name('user');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-Route::get('/user/{id}/services', [ServiceController::class, 'userServices'])->name('user-services');
-
-Route::get('/error', function() {
-    return view('pages.error');
-})->name('error');
-
-// Member Middleware
-Route::middleware(['auth:sanctum'])->group(function() {
-    Route::get('/cart', [CartController::class, 'index'])->name('cart');
-    Route::post('/addToCart', [CartController::class, 'store'])->name('addToCart');
-    Route::post('/checkout', [CartController::class, 'create'])->name('checkout');
-    Route::delete('/deleteCart', [CartController::class, 'destroy'])->name('deleteCart');
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
+    Route::delete('/cart', [CartController::class, 'destroy'])->name('cart.destroy');
+    Route::post('/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
 
     Route::get('/orders', [ServiceController::class, 'orders'])->name('orders');
-    Route::get('/create', [ServiceController::class, 'create'])->name('create');
-    Route::get('/service/{id}/edit', [ServiceController::class, 'edit'])->name('edit');
-    Route::post('/service/{id}/addReview', [ReviewController::class, 'store'])->name('store-review');
-    Route::post('/addService', [ServiceController::class, 'store'])->name('store');
-    Route::patch('/updateService/{id}', [ServiceController::class, 'update'])->name('updateService');
-    Route::delete('/deleteService/{id}', [ServiceController::class, 'destroy'])->name('deleteService');
+    Route::put('/orders/finish', [TransactionDetailController::class, 'finish'])->name('orders.finish');
 
-    Route::put('/finishOrder', [TransactionDetailController::class, 'finishOrder'])->name('finishOrder');
+    Route::get('/services/create', [ServiceController::class, 'create'])->name('services.create');
+    Route::get('/services/{id}/edit', [ServiceController::class, 'edit'])->name('services.edit')->whereNumber('id');
+    Route::post('/services', [ServiceController::class, 'store'])->name('services.store');
+    Route::patch('/services/{id}', [ServiceController::class, 'update'])->name('services.update')->whereNumber('id');
+    Route::delete('/services/{id}', [ServiceController::class, 'destroy'])->name('services.destroy')->whereNumber('id');
+
+    Route::post('/services/{id}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 });
 
-// Admin Middleawre
-Route::middleware(['admin'])->group(function(){
-    Route::get('/admin', [AdminController::class, 'index'])->name('admin-dashboard');
-    Route::get('/admin/category', [AdminController::class, 'category'])->name('admin-category');
-    Route::get('/admin/review', [AdminController::class, 'review'])->name('admin-review');
-    Route::get('/admin/service', [AdminController::class, 'service'])->name('admin-service');
-    
-    Route::get('/admin/transaction', [AdminController::class, 'transaction'])->name('admin-transaction');
-    Route::get('/admin/transaction/{id}/details', [AdminController::class, 'transactionDetail'])->name('admin-transaction-detail');
+Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', [AdminController::class, 'index'])->name('index');
 
-    Route::get('/admin/user', [AdminController::class, 'user'])->name('admin-user');
+    Route::get('/categories', [AdminController::class, 'categories'])->name('categories.index');
+    Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
+    Route::get('/categories/{id}/edit', [CategoryController::class, 'edit'])->name('categories.edit')->whereNumber('id');
+    Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
+    Route::patch('/categories/{id}', [CategoryController::class, 'update'])->name('categories.update')->whereNumber('id');
+    Route::delete('/categories/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy')->whereNumber('id');
 
-    Route::get('/admin/category/create', [CategoryController::class, 'create'])->name('create-category');
-    Route::get('/admin/category/edit/{id}', [CategoryController::class, 'edit'])->name('edit-category');
-    
-    Route::post('/admin/category/store', [CategoryController::class, 'store'])->name('store-category');
-    Route::patch('/admin/category/update/{id}', [CategoryController::class, 'update'])->name('update-category');
-    Route::patch('/admin/user/makeAdmin/{id}', [UserController::class, 'makeAdmin'])->name('make-user-admin');
-    Route::patch('/admin/user/makeMember/{id}', [UserController::class, 'makeMember'])->name('make-user-member');
-    
-    Route::delete('/admin/category/delete/{id}', [CategoryController::class, 'destroy'])->name('delete-category');
+    Route::get('/reviews', [AdminController::class, 'reviews'])->name('reviews.index');
+    Route::get('/services', [AdminController::class, 'services'])->name('services.index');
+    Route::get('/transactions', [AdminController::class, 'transactions'])->name('transactions.index');
+    Route::get('/transactions/{id}', [AdminController::class, 'transactionDetails'])->name('transactions.show')->whereNumber('id');
+    Route::get('/users', [AdminController::class, 'users'])->name('users.index');
+    Route::patch('/users/{id}/make-admin', [UserController::class, 'makeAdmin'])->name('users.make-admin')->whereNumber('id');
+    Route::patch('/users/{id}/make-member', [UserController::class, 'makeMember'])->name('users.make-member')->whereNumber('id');
 });
+
+require __DIR__.'/auth.php';
