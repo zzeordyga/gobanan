@@ -1,29 +1,37 @@
-app = "gobanan"
-primary_region = "iad"
+# fly.toml app configuration file generated for gobanan on 2026-11-16T16:22:06Z
+#
+# See https://docs.fly.io/reference/configuration for information about how to use this file.
+#
+
+app = 'gobanan'
+primary_region = 'ams'
 
 [build]
-  dockerfile = "Dockerfile"
+  dockerfile = 'Dockerfile'
+
+[deploy]
+  release_command = 'php artisan migrate --force --graceful'
+
+[env]
+  APP_ENV = 'production'
+  CACHE_STORE = 'database'
+  LOG_CHANNEL = 'stderr'
+  QUEUE_CONNECTION = 'database'
+  SESSION_DRIVER = 'database'
+
+[[mounts]]
+  source = 'gobanan_data'
+  destination = '/data'
 
 [http_service]
-  internal_port = 80
+  internal_port = 8080
   force_https = true
-  auto_stop_machines = true
+  auto_stop_machines = 'stop'
   auto_start_machines = true
   min_machines_running = 1
 
-# Persistent volume for the sqlite database so data survives redeploys.
-# Create once with: fly volumes create gobanan_data
-[[mounts]]
-  source = "gobanan_data"
-  destination = "/data"
-
-[env]
-  APP_ENV = "production"
-  LOG_CHANNEL = "stderr"
-  SESSION_DRIVER = "database"
-  CACHE_STORE = "database"
-  QUEUE_CONNECTION = "database"
-
-# Release command runs migrations before the new instance takes traffic.
-[deploy]
-  release_command = "php artisan migrate --force --graceful"
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1
+  memory_mb = 256
