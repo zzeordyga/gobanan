@@ -22,7 +22,7 @@ COPY composer.json composer.lock ./
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
 # ---------- frontend build ----------
-FROM node:20-alpine AS frontend
+FROM node:26-alpine AS frontend
 WORKDIR /app
 COPY package.json ./
 RUN npm install --no-audit --no-fund
