@@ -3,123 +3,56 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class CategoryController extends Controller
 {
-        /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function create(): Response
     {
-        //
+        return Inertia::render('Admin/Categories/Create');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function edit(int $id): Response
     {
-        return view('admin.add-category');
+        $category = Category::query()->whereKey($id)->firstOrFail()->only(['id', 'name', 'description']);
+
+        return Inertia::render('Admin/Categories/Edit', ['category' => $category]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        $validator = Validator::make($request->all(), [
-            "name" => ['required', 'string'],
-            "description" => ['required', 'string', 'max:255']
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:80', 'unique:categories,name'],
+            'description' => ['nullable', 'string', 'max:500'],
         ]);
 
-        if($validator->fails()){
-            return back()->withErrors($validator)->withInput();
-        }
+        Category::create($data);
 
-        $category = new Category();
-        $category->name = $request->name;
-        $category->description = $request->description;
-
-        $category->save();
-
-        return redirect()->route('admin-category');
+        return to_route('admin.categories.index')->with('status', 'Category created.');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function update(Request $request, int $id): RedirectResponse
     {
+        $category = Category::query()->whereKey($id)->firstOrFail();
 
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $category = Category::find($id);
-
-        return view('admin.edit-category', [
-            'category' => $category,
-        ]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        $validator = Validator::make($request->all(), [
-            "name" => ['required', 'string'],
-            "description" => ['required', 'string', 'max:255']
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:80', 'unique:categories,name,'.$id],
+            'description' => ['nullable', 'string', 'max:500'],
         ]);
 
-        if($validator->fails()){
-            return back()->withErrors($validator)->withInput();
-        }
+        $category->update($data);
 
-        $category = Category::find($id);
-        $category->name = $request->name;
-        $category->description = $request->description;
-
-        $category->save();
-
-        return redirect()->route('admin-category');
+        return to_route('admin.categories.index')->with('status', 'Category updated.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function destroy(int $id): RedirectResponse
     {
-        //
-        $category = Category::find($id);
-
+        $category = Category::query()->whereKey($id)->firstOrFail();
         $category->delete();
 
-        return redirect()->route('admin-category');
+        return to_route('admin.categories.index')->with('status', 'Category deleted.');
     }
 }

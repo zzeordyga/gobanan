@@ -2,23 +2,20 @@
 
 namespace Database\Factories;
 
+use App\Models\TransactionHeader;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @extends Factory<TransactionHeader>
+ */
 class TransactionHeaderFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    public function definition(): array
     {
-        $payment_types = ["Credit", "Debit"];
-
         return [
-            "user_id" => User::inRandomOrder()->first()->id,
-            "payment_type" => $payment_types[array_rand($payment_types)],
+            'user_id' => User::query()->inRandomOrder()->value('id') ?? User::factory(),
+            'payment_type' => fake()->randomElement(['Debit', 'Credit', 'Bank Transfer', 'E-Wallet']),
         ];
     }
 }

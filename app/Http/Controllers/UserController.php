@@ -2,108 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Service;
 use App\Models\User;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function makeAdmin(int $id): RedirectResponse
     {
-        //
+        $user = User::query()->whereKey($id)->firstOrFail();
+        $user->update(['role' => 'admin']);
+
+        return to_route('admin.users.index')->with('status', "{$user->name} is now an admin.");
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function makeMember(int $id): RedirectResponse
     {
-        //
-    }
+        $user = User::query()->whereKey($id)->firstOrFail();
+        abort_unless($user->id !== (int) auth()->id(), 403, 'You cannot demote yourself.');
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        $user->update(['role' => 'member']);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $user = User::find($id);
-        $services = Service::where('user_id', $id)->inRandomOrder()->limit(6)->get();
-
-        return view('pages.user', [
-            'user' => $user,
-            'services' => $services,
-        ]);
-    }
-
-    public function makeAdmin($id){
-        $user = User::find($id);
-
-        $user->role = 'admin';
-        $user->save();
-
-        return redirect()->back();
-    }
-
-    public function makeMember($id){
-        $user = User::find($id);
-
-        $user->role = 'member';
-        $user->save();
-
-        return redirect()->back();
-    }
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return to_route('admin.users.index')->with('status', "{$user->name} is now a member.");
     }
 }
