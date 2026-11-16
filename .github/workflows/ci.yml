@@ -22,8 +22,9 @@ jobs:
           DB_CONNECTION: sqlite
           DB_DATABASE: database/database.sqlite
         run: |
+          cp .env.example .env
           touch database/database.sqlite
-          php artisan key:generate --ansi
+          php artisan key:generate --ansi --force
           php artisan migrate --graceful --ansi
       - name: Pint
         run: vendor/bin/pint --test
