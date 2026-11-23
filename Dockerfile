@@ -1,5 +1,5 @@
 # ---------- base: PHP 8.4 FPM + system deps ----------
-FROM php:8.4-fpm-alpine AS base
+FROM php:8.6-fpm-alpine AS base
 
 RUN apk add --no-cache \
         nginx \
